@@ -2,8 +2,6 @@
 
 const fs = require('fs');
 const request = require('request');
-const path = require('path');
-const unzip = require('unzip');
 const semver = require('semver');
 const download = require('download-file');
 
@@ -38,23 +36,8 @@ class Updater {
         directory: this.options.cacheDir,
         filename: zipFileName
       },
-      err => {
-        if (err) {
-          onDownloadCompleted(err);
-          return;
-        }
-
-        const unzipExtractor = unzip.Extract({path: this.options.cacheDir});
-
-        fs.createReadStream(path.resolve(this.options.cacheDir, zipFileName)).pipe(unzipExtractor);
-
-        unzipExtractor.on('error', err => {
-          onDownloadCompleted(err);
-        });
-        unzipExtractor.on('close', () => {
-          onDownloadCompleted();
-        });
-      });
+      err => onDownloadCompleted(err)
+    );
   }
 }
 
