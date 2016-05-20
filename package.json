@@ -1,5 +1,5 @@
 {
-  "name": "electron-update-chacker",
+  "name": "electron-update-checker",
   "version": "0.1.0",
   "description": "application updater",
   "main": "index.js",
