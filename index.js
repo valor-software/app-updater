@@ -1,11 +1,9 @@
 'use strict';
 
-const fs = require('fs');
 const request = require('request');
 const semver = require('semver');
-const download = require('download-file');
 
-class Updater {
+class Checker {
   constructor(options) {
     this.options = options;
   }
@@ -27,18 +25,6 @@ class Updater {
     });
   }
 
-  downloadUpdate(newVersion, onDownloadCompleted) {
-    const zipFileName = this.options.zipFilePattern.replace('#version', newVersion);
-
-    download(
-      this.options.url + '/' + zipFileName,
-      {
-        directory: this.options.cacheDir,
-        filename: zipFileName
-      },
-      err => onDownloadCompleted(err)
-    );
-  }
 }
 
-module.exports = Updater;
+module.exports = Checker;
