@@ -2,7 +2,6 @@
 const fs = require('fs');
 const download = require('download-file');
 const path = require('path');
-// const unzip = require('unzip');
 const AdmZip = require('adm-zip');
 
 const options = {
@@ -27,34 +26,37 @@ function deleteFolderRecursive(path) {
 
 function downloadUpdate(newVersion, onDownloadCompleted) {
   const zipFileName = options.zipFilePattern.replace('#version', newVersion);
+  const url = options.url + '/' + zipFileName;
+
+  console.log(`<div>Starting download from ${url}. This operation will take some time. Wait please...</div>`);
 
   download(
-    options.url + '/' + zipFileName,
+    url,
     {
       directory: options.cacheDir,
       filename: zipFileName
     },
     err => {
       if (err) {
+        console.log(`<div>Download failed from ${err}</div>`);
         onDownloadCompleted(err);
         return;
       }
 
-
-      /*const zip = new AdmZip(path.resolve(options.cacheDir, zipFileName));
-       zip.extractAllTo(options.cacheDir);
-
-       fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'Gapminder Offline'), '777');*/
-
-      //deleteFolderRecursive('./resources');
+      console.log(`<div>Download was finished</div>`);
+      console.log('<div>Starting unpack process. This operation will take some time. Wait please...</div>');
 
       const zip = new AdmZip(path.resolve(options.cacheDir, zipFileName));
       zip.extractAllTo(options.cacheDir);
+
+      console.log('<div>Update was unpacked.</div>');
 
       fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'Gapminder Offline'), '777');
       fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'libnode.so'), '777');
       fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'updater'), '777');
       fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'run'), '777');
+
+      console.log('<div>Now program will be restarted.</div>');
 
       onDownloadCompleted();
     });
