@@ -2,13 +2,28 @@
 const fs = require('fs');
 const download = require('download-file');
 const path = require('path');
-const unzip = require('unzip');
+// const unzip = require('unzip');
+const AdmZip = require('adm-zip');
 
 const options = {
   url: 'http://127.0.0.1:8080',
   zipFilePattern: 'GapminderOffline-linux-#version.zip',
   cacheDir: './cache'
 };
+
+function deleteFolderRecursive(path) {
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path).forEach(function (file) {
+      var curPath = path + '/' + file;
+      if (fs.lstatSync(curPath).isDirectory()) {
+        deleteFolderRecursive(curPath);
+      } else {
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+}
 
 function downloadUpdate(newVersion, onDownloadCompleted) {
   const zipFileName = options.zipFilePattern.replace('#version', newVersion);
@@ -25,16 +40,23 @@ function downloadUpdate(newVersion, onDownloadCompleted) {
         return;
       }
 
-      const unzipExtractor = unzip.Extract({path: options.cacheDir});
 
-      fs.createReadStream(path.resolve(options.cacheDir, zipFileName)).pipe(unzipExtractor);
+      /*const zip = new AdmZip(path.resolve(options.cacheDir, zipFileName));
+       zip.extractAllTo(options.cacheDir);
 
-      unzipExtractor.on('error', err => {
-        onDownloadCompleted(err);
-      });
-      unzipExtractor.on('close', () => {
-        onDownloadCompleted();
-      });
+       fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'Gapminder Offline'), '777');*/
+
+      //deleteFolderRecursive('./resources');
+
+      const zip = new AdmZip(path.resolve(options.cacheDir, zipFileName));
+      zip.extractAllTo(options.cacheDir);
+
+      fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'Gapminder Offline'), '777');
+      fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'libnode.so'), '777');
+      fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'updater'), '777');
+      fs.chmodSync(path.resolve(options.cacheDir, 'Gapminder Offline-linux-x64', 'run'), '777');
+
+      onDownloadCompleted();
     });
 }
 

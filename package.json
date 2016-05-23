@@ -10,6 +10,7 @@
   "author": "Vyacheslav Chub",
   "license": "GPL-3.0",
   "dependencies": {
+    "adm-zip": "0.4.7",
     "download-file": "0.1.5",
     "lodash": "4.12.0",
     "path": "0.12.7",
