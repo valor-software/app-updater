@@ -11,11 +11,13 @@
   "license": "GPL-3.0",
   "dependencies": {
     "adm-zip": "0.4.7",
+    "decompress": "^4.0.0",
+    "decompress-zip": "^0.3.0",
     "download-file": "0.1.5",
     "lodash": "4.12.0",
     "path": "0.12.7",
-    "request": "2.72.0",
+    "request": "^2.72.0",
     "semver": "5.1.0",
-    "unzip": "0.1.11"
+    "unzip": "^0.1.11"
   }
 }
