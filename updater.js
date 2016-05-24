@@ -60,8 +60,8 @@ function downloadUpdate(onDownloadCompleted) {
         }
 
         if (options.platform === 'linux' || options.platform === 'darwin') {
-          fs.chmodSync(path.resolve(options.cacheDir, expectedDirectory, 'updater'), '777');
-          fs.chmodSync(path.resolve(options.cacheDir, expectedDirectory, 'run'), '777');
+          fs.chmodSync(path.resolve(options.cacheDir, expectedDirectory, 'updater-' + options.platform), '777');
+          fs.chmodSync(path.resolve(options.cacheDir, expectedDirectory, 'run-' + options.platform), '777');
         }
 
         console.log('<div>Now program will be restarted.</div>');
