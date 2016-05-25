@@ -42,7 +42,21 @@ function downloadUpdate(onDownloadCompleted) {
       console.log(`<div>Download was finished</div>`);
       console.log('<div>Starting unpack process. This operation will take some time. Wait please...</div>');
 
-      const unzipper = new DecompressZip(path.resolve(options.cacheDir, zipFileName));
+      const unzip = require('unzip');
+
+      var unzipExtractor = unzip.Extract({ path: options.cacheDir });
+      unzipExtractor.on('error', err => {
+        console.log(`<div>Download failed from ${err}</div>`);
+        onDownloadCompleted(err);
+      });
+      unzipExtractor.on('close', () => {
+        console.log('<div>Now program will be restarted.</div>');
+
+        onDownloadCompleted();
+      });
+
+      fs.createReadStream(path.resolve(options.cacheDir, zipFileName)).pipe(unzipExtractor);
+      /*const unzipper = new DecompressZip(path.resolve(options.cacheDir, zipFileName));
 
       unzipper.on('error', err => {
         console.log(`<div>Download failed from ${err}</div>`);
@@ -68,9 +82,9 @@ function downloadUpdate(onDownloadCompleted) {
 
 
         onDownloadCompleted();
-      });
+      });*/
 
-      unzipper.extract({path: options.cacheDir});
+      //unzipper.extract({path: options.cacheDir});
     });
 }
 

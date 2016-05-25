@@ -6,7 +6,7 @@
   "scripts": {
     "build-exe-linux": "nexe -i updater.js -o updater-linux",
     "build-exe-darwin": "nexe -i updater.js -o updater-darwin",
-    "build-exe-windows": "nexe -i updater.js -o updater-windows.exe",
+    "build-exe-win32": "nexe -i updater.js -o updater-win32.exe",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vyacheslav Chub",
@@ -17,6 +17,6 @@
     "lodash": "4.12.0",
     "path": "0.12.7",
     "semver": "5.1.0",
-    "unzip": "^0.1.11"
+    "unzip": "0.1.11"
   }
 }
