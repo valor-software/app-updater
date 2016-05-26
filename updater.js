@@ -2,21 +2,6 @@
 const fs = require('fs');
 const download = require('download-file');
 const path = require('path');
-const DecompressZip = require('decompress-zip');
-
-function deleteFolderRecursive(path) {
-  if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function (file) {
-      var curPath = path + '/' + file;
-      if (fs.lstatSync(curPath).isDirectory()) {
-        deleteFolderRecursive(curPath);
-      } else {
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
-}
 
 function downloadUpdate(onDownloadCompleted) {
   const zipFileName = options.zipFilePattern
@@ -24,7 +9,7 @@ function downloadUpdate(onDownloadCompleted) {
     .replace('#platform', options.platform);
   const url = options.url + '/' + zipFileName;
 
-  console.log(`<div>Starting download from ${url}. This operation will take some time. Wait please...</div>`);
+  console.log('#start-download@ok');
 
   download(
     url,
@@ -34,57 +19,26 @@ function downloadUpdate(onDownloadCompleted) {
     },
     err => {
       if (err) {
-        console.log(`<div>Download failed from ${err}</div>`);
+        console.log('#finish-download@fail');
         onDownloadCompleted(err);
         return;
       }
 
-      console.log(`<div>Download was finished</div>`);
-      console.log('<div>Starting unpack process. This operation will take some time. Wait please...</div>');
+      console.log('#finish-download@ok');
 
       const unzip = require('unzip');
-
-      var unzipExtractor = unzip.Extract({ path: options.cacheDir });
+      const unzipExtractor = unzip.Extract({path: options.cacheDir});
       unzipExtractor.on('error', err => {
-        console.log(`<div>Download failed from ${err}</div>`);
+        console.log('#unpack@fail');
         onDownloadCompleted(err);
       });
       unzipExtractor.on('close', () => {
-        console.log('<div>Now program will be restarted.</div>');
+        console.log('#unpack@ok');
 
         onDownloadCompleted();
       });
 
       fs.createReadStream(path.resolve(options.cacheDir, zipFileName)).pipe(unzipExtractor);
-      /*const unzipper = new DecompressZip(path.resolve(options.cacheDir, zipFileName));
-
-      unzipper.on('error', err => {
-        console.log(`<div>Download failed from ${err}</div>`);
-        onDownloadCompleted(err);
-      });
-
-      unzipper.on('extract', () => {
-        console.log('<div>Update was unpacked.</div>');
-
-        const expectedDirectory = options.directoryPattern.replace('#platform', options.platform);
-
-        if (options.platform === 'linux') {
-          fs.chmodSync(path.resolve(options.cacheDir, expectedDirectory, 'Gapminder Offline'), '777');
-          fs.chmodSync(path.resolve(options.cacheDir, expectedDirectory, 'libnode.so'), '777');
-        }
-
-        if (options.platform === 'linux' || options.platform === 'darwin') {
-          fs.chmodSync(path.resolve(options.cacheDir, expectedDirectory, 'updater-' + options.platform), '777');
-          fs.chmodSync(path.resolve(options.cacheDir, expectedDirectory, 'run-' + options.platform), '777');
-        }
-
-        console.log('<div>Now program will be restarted.</div>');
-
-
-        onDownloadCompleted();
-      });*/
-
-      //unzipper.extract({path: options.cacheDir});
     });
 }
 

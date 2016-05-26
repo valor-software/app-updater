@@ -12,7 +12,6 @@
   "author": "Vyacheslav Chub",
   "license": "GPL-3.0",
   "dependencies": {
-    "decompress-zip": "^0.3.0",
     "download-file": "0.1.5",
     "lodash": "4.12.0",
     "path": "0.12.7",
