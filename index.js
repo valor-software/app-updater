@@ -2,9 +2,6 @@
 
 const request = require('request');
 const semver = require('semver');
-const fs = require('fs');
-const download = require('download-file');
-const path = require('path');
 
 class Checker {
   constructor(options) {
@@ -26,62 +23,6 @@ class Checker {
 
       onVersionDetected(null, hasVersion() && greaterThanCurrent() ? body.version : null);
     });
-  }
-
-  downloadUpdate(inp, onDownloadRunning, onDownloadCompleted) {
-
-    const options = {
-      newVersion: inp[0],
-      platform: inp[1],
-      zipHost: inp[2],
-      zipPostfix: inp[3],
-      jsonHost: inp[4],
-      zipFilePattern: inp[5],
-      directoryPattern: inp[6],
-      cacheDir: inp[7]
-    };
-
-    var noAsarTmp = process.noAsar;
-    process.noAsar = true;
-
-    const zipFileName = options.zipFilePattern
-      .replace('#platform', options.platform);
-    const host = options.zipHost
-      .replace('#version', options.newVersion);
-    const url = host + '/' + zipFileName + options.zipPostfix;
-
-    onDownloadRunning('#start-download@ok');
-
-    download(
-      url,
-      {
-        directory: options.cacheDir,
-        filename: zipFileName
-      },
-      err => {
-        if (err) {
-          onDownloadRunning('#finish-download@fail');
-          onDownloadCompleted(err);
-          return;
-        }
-
-        onDownloadRunning('#finish-download@ok');
-
-        const unzip = require('unzip');
-        const unzipExtractor = unzip.Extract({path: options.cacheDir});
-        unzipExtractor.on('error', err => {
-          onDownloadRunning('#unpack@fail');
-          onDownloadCompleted(err);
-        });
-        unzipExtractor.on('close', () => {
-          onDownloadRunning('#unpack@ok');
-
-          process.noAsar = noAsarTmp;
-          onDownloadCompleted();
-        });
-
-        fs.createReadStream(path.resolve(options.cacheDir, zipFileName)).pipe(unzipExtractor);
-      });
   }
 }
 
