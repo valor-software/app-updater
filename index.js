@@ -28,7 +28,7 @@ class Checker {
     });
   }
 
-  downloadUpdate(inp, onDownloadCompleted) {
+  downloadUpdate(inp, onDownloadRunning, onDownloadCompleted) {
 
     const options = {
       newVersion: inp[0],
@@ -50,7 +50,7 @@ class Checker {
       .replace('#version', options.newVersion);
     const url = host + '/' + zipFileName + options.zipPostfix;
 
-    console.log('#start-download@ok');
+    onDownloadRunning('#start-download@ok');
 
     download(
       url,
@@ -60,21 +60,21 @@ class Checker {
       },
       err => {
         if (err) {
-          console.log('#finish-download@fail');
+          onDownloadRunning('#finish-download@fail');
           onDownloadCompleted(err);
           return;
         }
 
-        console.log('#finish-download@ok');
+        onDownloadRunning('#finish-download@ok');
 
         const unzip = require('unzip');
         const unzipExtractor = unzip.Extract({path: options.cacheDir});
         unzipExtractor.on('error', err => {
-          console.log('#unpack@fail');
+          onDownloadRunning('#unpack@fail');
           onDownloadCompleted(err);
         });
         unzipExtractor.on('close', () => {
-          console.log('#unpack@ok');
+          onDownloadRunning('#unpack@ok');
 
           process.noAsar = noAsarTmp;
           onDownloadCompleted();

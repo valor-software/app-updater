@@ -1,8 +1,4 @@
 .idea
-updater-linux
-updater-darwin
-updater-windows.exe
 node_modules
 npm-debug.log
 coverage
-tmp
