@@ -41,6 +41,9 @@ class Checker {
       cacheDir: inp[7]
     };
 
+    var noAsarTmp = process.noAsar;
+    process.noAsar = true;
+
     const zipFileName = options.zipFilePattern
       .replace('#platform', options.platform);
     const host = options.zipHost
@@ -73,6 +76,7 @@ class Checker {
         unzipExtractor.on('close', () => {
           console.log('#unpack@ok');
 
+          process.noAsar = noAsarTmp;
           onDownloadCompleted();
         });
 
