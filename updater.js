@@ -5,10 +5,10 @@ const path = require('path');
 
 function downloadUpdate(onDownloadCompleted) {
   const zipFileName = options.zipFilePattern
-    .replace('#platform', options.platform);
+    .replace(/#platform/g, options.platform);
   const host = options.zipHost
-    .replace('#version', options.newVersion);
-  const url = host + '/' + zipFileName + options.zipPostfix;
+    .replace(/#version/g, options.newVersion);
+  const url = host + '/' + zipFileName;
 
   console.log('#start-download@ok');
 
@@ -47,11 +47,9 @@ const options = {
   newVersion: process.argv[2],
   platform: process.argv[3],
   zipHost: process.argv[4],
-  zipPostfix: process.argv[5],
-  jsonHost: process.argv[6],
-  zipFilePattern: process.argv[7],
-  directoryPattern: process.argv[8],
-  cacheDir: process.argv[9]
+  zipFilePattern: process.argv[5],
+  directoryPattern: process.argv[6],
+  cacheDir: process.argv[7]
 };
 
 
