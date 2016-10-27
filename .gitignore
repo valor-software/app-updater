@@ -6,3 +6,6 @@ updater-windows.exe
 tmp
 npm-debug.log
 coverage
+cache
+example
+foo
