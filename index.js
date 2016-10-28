@@ -75,11 +75,11 @@ if (mode === 'download') {
 }
 
 if (mode === 'unpack') {
-  const source = process.argv[3];
-  const target = process.argv[4];
+  const directory = process.argv[3];
+  const file = process.argv[4];
 
-  if (source && target) {
-    processUnpack({source, target});
+  if (directory && file) {
+    processUnpack({directory, file});
   }
 }
 
