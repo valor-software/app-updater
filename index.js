@@ -3,7 +3,7 @@
 const versionCheck = require('./lib/version-check');
 const download = require('./lib/download');
 const unpack = require('./lib/unpack');
-const copy = require('./lib/copy');
+const finish = require('./lib/finish');
 const mode = process.argv[2];
 const processCheck = options => {
   versionCheck(options, (err, newVersion) => {
@@ -44,15 +44,15 @@ const processUnpack = options => {
       process.stdout.write(`$unpack@\n`);
     });
 };
-const processCopy = options => {
-  copy(options,
+const processFinish = options => {
+  finish(options,
     err => {
       if (err) {
-        process.stdout.write(`!copy@${err}\n`);
+        process.stdout.write(`!finish@${err}\n`);
         return;
       }
 
-      process.stdout.write(`$copy@\n`);
+      process.stdout.write(`$finish@\n`);
     });
 };
 
@@ -83,12 +83,13 @@ if (mode === 'unpack') {
   }
 }
 
-if (mode === 'copy') {
+if (mode === 'finish') {
   const source = process.argv[3];
   const target = process.argv[4];
   const toDelete = process.argv[5];
+  const toRun = process.argv[6];
 
-  if (source && target) {
-    processCopy({source, target, toDelete});
+  if (source && target && toDelete && toRun) {
+    processFinish({source, target, toDelete, toRun});
   }
 }
