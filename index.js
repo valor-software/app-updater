@@ -3,7 +3,8 @@
 const versionCheck = require('./lib/version-check');
 const download = require('./lib/download');
 const unpack = require('./lib/unpack');
-const finish = require('./lib/finish');
+const update = require('./lib/update');
+const finishUpdate = require('./lib/finish-update');
 const mode = process.argv[2];
 const processCheck = options => {
   versionCheck(options, (err, newVersion) => {
@@ -44,8 +45,19 @@ const processUnpack = options => {
       process.stdout.write(`$unpack@\n`);
     });
 };
-const processFinish = options => {
-  finish(options,
+const processUpdate = options => {
+  update(options,
+    err => {
+      if (err) {
+        process.stdout.write(`!update@${err}\n`);
+        return;
+      }
+
+      process.stdout.write(`$update@\n`);
+    });
+};
+const processFinishUpdate = options => {
+  finishUpdate(options,
     err => {
       if (err) {
         process.stdout.write(`!finish@${err}\n`);
@@ -83,13 +95,24 @@ if (mode === 'unpack') {
   }
 }
 
-if (mode === 'finish') {
+if (mode === 'update') {
   const source = process.argv[3];
   const target = process.argv[4];
   const toDelete = process.argv[5];
   const toRun = process.argv[6];
 
   if (source && target && toDelete && toRun) {
-    processFinish({source, target, toDelete, toRun});
+    processUpdate({source, target, toDelete, toRun});
+  }
+}
+
+if (mode === 'finish-update') {
+  const source = process.argv[3];
+  const target = process.argv[4];
+  const toDelete = process.argv[5];
+  const toRun = process.argv[6];
+
+  if (source && target && toDelete && toRun) {
+    processFinishUpdate({source, target, toDelete, toRun});
   }
 }
