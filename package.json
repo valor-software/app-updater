@@ -1,12 +1,9 @@
 {
-  "name": "electron-update-checker",
+  "name": "electron-simple-updater",
   "version": "0.2.0",
   "description": "application updater",
   "main": "index.js",
   "scripts": {
-    "build-exe-linux": "nexe -i index.js -o updater-linux -r 6.9.1",
-    "build-exe-darwin": "nexe -i index.js -o updater-darwin -r 6.9.1",
-    "build-exe-win32": "nexe -i index.js -o updater-win32.exe -r 6.9.1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vyacheslav Chub",
