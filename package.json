@@ -1,6 +1,6 @@
 {
   "name": "electron-easy-updater",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "application updater",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,6 @@
     "download-file": "0.1.5",
     "http": "0.0.0",
     "lodash": "4.12.0",
-    "path": "0.12.7",
     "request": "2.76.0",
     "semver": "5.1.0",
     "unzip": "0.1.11"
