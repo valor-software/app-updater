@@ -1,10 +1,14 @@
 {
   "name": "electron-easy-updater",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "application updater",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/valor-software/electron-auto-updater.git"
   },
   "author": "Vyacheslav Chub",
   "license": "GPL-3.0",
